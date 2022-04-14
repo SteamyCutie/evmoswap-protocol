@@ -7,7 +7,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  // init code: 0x00983433c3948bbc96fc423e4faf252cff21db76a6f4c5c26b16ef0800905a66
+  // init code: 0x1a74734eea11bc0ee7528f77a3306d46a0e9015d2eca65dd5651259a4b2eefe1
   const WEVMOS = await ethers.getContract("WEVMOS");
   const evmoSwapV2Factory = await deployments.get("EvmoSwapFactory");
 

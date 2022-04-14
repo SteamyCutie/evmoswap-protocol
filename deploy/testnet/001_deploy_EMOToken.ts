@@ -2,24 +2,21 @@ import { run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async({getNamedAccounts, deployments, network}) => {
-  console.log("> (001) Deploy EvmosSwapFactory:");
-
+  console.log("> (001) Deploy EMOToken:");
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  // EvmosSwapFactory
-  const result = await deploy("EvmoSwapFactory", {
+  // EMOToken
+  const result = await deploy("EMOToken", {
     log: true,
     from: deployer,
-    args: [deployer],
   });
-  
+
   // Verify contract
   if(result.newlyDeployed) {
     if (network.live) {
       await run("verify:verify", {
-        address: result.address,
-        constructorArguments: [deployer],
+        address: result.address
       });
     }
   }
@@ -31,4 +28,4 @@ func.skip = async (hre) => {
   return hre.network.name != 'testnets';
 };
 
-func.tags = ["EvmosSwapFactory"];
+func.tags = ["EMOToken"];

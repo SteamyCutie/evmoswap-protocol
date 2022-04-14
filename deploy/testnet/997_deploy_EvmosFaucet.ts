@@ -2,21 +2,28 @@ import { run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async({getNamedAccounts, deployments, network}) => {
-  console.log("> (001) Deploy EmosToken:");
+  console.log("> (997) Deploy EvmosFaucet:");
+
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  // EmosToken
-  const result = await deploy("EmosToken", {
+  const deployArgs = [
+    '0x7c4a1D38A755a7Ce5521260e874C009ad9e4Bf9c', // _dai
+    '0x36dD1fb6DA561AddCaa66b909eF571b92Dffc594', // _usdc
+    '0x397F8aBd481B7c00883fb70da2ea5Ae70999c37c', // _usdt
+  ]; 
+
+  const deployResult = await deploy("EvmosFaucet", {
     log: true,
     from: deployer,
+    args: deployArgs,
   });
 
-  // Verify contract
-  if(result.newlyDeployed) {
+  if(deployResult.newlyDeployed) {
     if (network.live) {
       await run("verify:verify", {
-        address: result.address
+        address: deployResult.address,
+        constructorArguments: deployArgs
       });
     }
   }
@@ -28,4 +35,4 @@ func.skip = async (hre) => {
   return hre.network.name != 'testnet';
 };
 
-func.tags = ["EmosToken"];
+func.tags = ["EvmosFaucet"];

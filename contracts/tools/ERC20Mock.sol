@@ -10,7 +10,7 @@ contract ERC20Mock is ERC20 {
         string memory symbol,
         uint256 supply
     ) public ERC20(name, symbol) {
-        _setupDecimals(6);
+        // _setupDecimals(6);
         _mint(msg.sender, supply);
     }
 
