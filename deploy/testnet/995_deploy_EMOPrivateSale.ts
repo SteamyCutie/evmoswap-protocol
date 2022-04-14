@@ -16,7 +16,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
   const args = [
     process.env.TESTNET_TREASURY, //_treasury
     process.env.TESTNET_TREASURY, //_keeper
-    '0x36dD1fb6DA561AddCaa66b909eF571b92Dffc594', // _usdc - when mainnet need to modify it.
+    '0xae95d4890bf4471501E0066b6c6244E1CAaEe791', // _usdc - when mainnet need to modify it.
     emoToken.address, // _emo
     parseUnits("0.10", 6), // _tokenPrice * 1000000,
     parseUnits("0.3756", 6), // _basePrice * 1000000, the price of CRO in usd multiply by PRECISION
@@ -47,7 +47,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'testnetS';
+  return hre.network.name != 'testnet';
 };
 
 func.tags = ["EMOPrivateSale"];

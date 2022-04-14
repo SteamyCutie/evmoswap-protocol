@@ -9,7 +9,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
 
   const deployArgs = [
     '0x7c4a1D38A755a7Ce5521260e874C009ad9e4Bf9c', // _dai
-    '0x36dD1fb6DA561AddCaa66b909eF571b92Dffc594', // _usdc
+    '0xae95d4890bf4471501E0066b6c6244E1CAaEe791', // _usdc
     '0x397F8aBd481B7c00883fb70da2ea5Ae70999c37c', // _usdt
   ]; 
 

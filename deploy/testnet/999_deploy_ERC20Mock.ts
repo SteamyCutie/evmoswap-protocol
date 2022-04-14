@@ -11,7 +11,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
   const resultMulti = await deploy("ERC20Mock", {
     log: true,
     from: deployer,
-    args: ['DAI Mock', 'DAI', parseUnits("50000000", 18)],
+    args: ['USDC Mock', 'USDC', parseUnits("50000000", 6)],
   });
 
   // Verify contract
@@ -27,7 +27,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'testnetS';
+  return hre.network.name != 'testnets';
 };
 
 func.tags = ["ERC20Mock"];

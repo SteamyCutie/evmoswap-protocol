@@ -17,7 +17,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 
 
   const WEVMOS = await ethers.getContract("WEVMOS");
-  const USDC = "0x36dD1fb6DA561AddCaa66b909eF571b92Dffc594";
+  const USDC = "0xae95d4890bf4471501E0066b6c6244E1CAaEe791";
 
   // address _weth, address _usdc, address _reward, address _master, address _factory
   const dashboardArgs = [WEVMOS.address, USDC, emoToken.address, masterChef.address, evmoSwapFactory.address];
