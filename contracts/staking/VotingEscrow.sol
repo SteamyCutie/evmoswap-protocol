@@ -487,7 +487,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     * @param _t Epoch time to return voting power at
     * @return User voting power
     **/
-    function balanceOf(address addr, uint256 _t) public view returns (uint256) {
+    function balanceOfT(address addr, uint256 _t) public view returns (uint256) {
         uint256 _epoch = userPointEpoch[addr];
         if (_epoch == 0) {
             return 0;
@@ -507,7 +507,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     * @return User voting power
     **/
     function balanceOf(address addr) external view returns (uint256) {
-        return balanceOf(addr, block.timestamp);
+        return balanceOfT(addr, block.timestamp);
     }
 
     /**
@@ -516,7 +516,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     * @param _block Block to calculate the voting power at
     * @return Voting power
     **/
-    function balanceOfAt(address addr, uint256 _block) external view returns (uint256) {
+    function balanceOfB(address addr, uint256 _block) external view returns (uint256) {
         require(_block <= block.number, "Block should not be greater than current block!");
 
         uint256 _min = 0;
@@ -597,7 +597,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     * @param t Time to calculate the total voting power at
     * @return Total voting power
     **/
-    function totalSupply(uint256 t) public view returns (uint256) {
+    function totalSupplyT(uint256 t) public view returns (uint256) {
         Point memory lastPoint = pointHistory[epoch];
         return supplyAt(lastPoint, t);
     }
@@ -607,7 +607,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     * @return Total voting power
     **/
     function totalSupply() external view returns (uint256) {
-        return totalSupply(block.timestamp);
+        return totalSupplyT(block.timestamp);
     }
 
     /**
@@ -615,7 +615,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     * @param _block Block to calculate the total voting power at
     * @return Total voting power at `_block`
     **/
-    function totalSupplyAt(uint256 _block) external view returns (uint256) {
+    function totalSupplyB(uint256 _block) external view returns (uint256) {
         require(_block <= block.number, "Block should not be greater than current block!");
         uint256 _epoch = epoch;
         uint256 targetEpoch = findBlockEpoch(_block, _epoch);

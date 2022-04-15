@@ -210,7 +210,7 @@ contract IFOInitializable is IEvmoSwapIFO, ReentrancyGuard, Ownable {
             uint256 raisingDecimal = IVotingEscrow(address(_poolInformation[_pid].raisingToken)).decimals();
             require(veDecimal >= raisingDecimal, "Wrong decimal");
 
-            uint256 ifoCredit = IVotingEscrow(votingEscrowAddress).balanceOf(msg.sender, startTime) * VE_RATE;
+            uint256 ifoCredit = IVotingEscrow(votingEscrowAddress).balanceOfT(msg.sender, startTime) * VE_RATE;
             require(_userInfo[msg.sender][_pid].amountPool.add(_amount).mul(10 ** (veDecimal - raisingDecimal)) <= ifoCredit, "Not enough veEmo");
         }
 
