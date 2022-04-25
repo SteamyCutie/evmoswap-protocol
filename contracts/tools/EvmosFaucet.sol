@@ -15,7 +15,7 @@ contract EvmosFaucet is Ownable {
     address public immutable usdc;
     address public immutable usdt;
 
-    uint256 public constant FAUCET_AMOUNT = 1000; // 1000 pre address
+    uint256 public constant FAUCET_AMOUNT = 50; // 50 pre address
 
     constructor(
         address _dai,

@@ -39,7 +39,7 @@ contract MultiFeeDistribution is IMultiFeeDistribution, Ownable {
     uint256 public constant WEEK = 86400 * 7;
 
     // Duration of lock/earned penalty period
-    uint256 public constant lockDuration = WEEK * 13;
+    uint256 public constant lockDuration = WEEK * 4;
 
     // Addresses approved to call mint
     mapping(address => bool) public minters;

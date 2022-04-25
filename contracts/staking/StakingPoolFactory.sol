@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.6.12;
 
-import "./SmartChefInitializable.sol";
+import "./StakingPoolInitializable.sol";
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
-contract SmartChefFactory is Ownable {
-    event NewSmartChefContract(address indexed smartChef);
+contract StakingPoolFactory is Ownable {
+    event NewStakingPoolContract(address indexed stakingPool);
 
     constructor() public {
         //
@@ -35,15 +35,15 @@ contract SmartChefFactory is Ownable {
         require(_rewardToken.totalSupply() >= 0);
         require(_stakedToken != _rewardToken, "Tokens must be be different");
 
-        bytes memory bytecode = type(SmartChefInitializable).creationCode;
+        bytes memory bytecode = type(StakingPoolInitializable).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(_stakedToken, _rewardToken, _startBlock));
-        address smartChefAddress;
+        address stakingPoolAddress;
 
         assembly {
-            smartChefAddress := create2(0, add(bytecode, 32), mload(bytecode), salt)
+            stakingPoolAddress := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
 
-        SmartChefInitializable(smartChefAddress).initialize(
+        StakingPoolInitializable(stakingPoolAddress).initialize(
             _stakedToken,
             _rewardToken,
             _rewardPerBlock,
@@ -53,6 +53,6 @@ contract SmartChefFactory is Ownable {
             _admin
         );
 
-        emit NewSmartChefContract(smartChefAddress);
+        emit NewStakingPoolContract(stakingPoolAddress);
     }
 }

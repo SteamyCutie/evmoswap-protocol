@@ -3,6 +3,8 @@ import {ethers} from "hardhat";
 async function main() {
 
     const masterChef = await ethers.getContract("MasterChef");
+    const rewardPool = await ethers.getContract("RewardPool");
+    const votingEscrow = await ethers.getContract("VotingEscrow");
     const multiFeeDistribution = await ethers.getContract("MultiFeeDistribution");
 
     // 1 set startTime
@@ -10,9 +12,20 @@ async function main() {
     // await masterChef.setStartTime(startTime);
     // console.log('setStartTime done!', startTime)
 
-    // 2 console.log("Add Masterchef as minter of MultiFeeDistribution, masterChef=", masterChef.address);
+    // 2 set pool0Staker
+    // const pool0Staker = [
+    //     rewardPool.address
+    // ]
+    // await masterChef.setPool0Staker(pool0Staker, true);
+
+    // 3 set masterChef
+    await votingEscrow.setMasterchef(masterChef.address);
+    console.log('setMasterchef done!', masterChef.address)
+
+    // 4 console.log("Add Masterchef as minter of MultiFeeDistribution, masterChef=", masterChef.address);
     // await multiFeeDistribution.setMinters([masterChef.address]);
 
+    ////////////////////////////////////////////////////////
     // 02 add pool uint256 _allocPoint, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate
     // await masterChef.add(
     //     3000,
@@ -22,13 +35,13 @@ async function main() {
     //     true
     // );
 
-    await masterChef.add(
-        2000,
-        '0x1B7E27cf4984D69745cB9C65030c0e123Ee57054', //usdc-emo
-        '0x0000000000000000000000000000000000000000', //rewards
-        true,
-        true
-    );
+    // await masterChef.add(
+    //     2000,
+    //     '0x1B7E27cf4984D69745cB9C65030c0e123Ee57054', //usdc-emo
+    //     '0x0000000000000000000000000000000000000000', //rewards
+    //     true,
+    //     true
+    // );
 
     // await masterChef.add(
     //     1000,
