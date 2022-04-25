@@ -29,6 +29,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         uint256 allocPoint;       // How many allocation points assigned to this pool. EMOs to distribute per second.
         uint256 lastRewardTime;  // Last second number that EMOs distribution occurs.
         uint256 accEmoPerShare; // Accumulated EMOs per share, times 1e12. See below.
+        uint256 depositFeePercent;      // Deposit fee in basis points
         IOnwardIncentivesController incentivesController; // bonus reward
     }
 
@@ -53,6 +54,8 @@ contract MasterChef is Ownable, ReentrancyGuard {
     address public safuaddr;
     // Refferals commision address.
     address public refAddr;
+    // Deposit Fee address
+    address public feeAddr;
     // Last block then develeper withdraw dev and ref fee
     uint256 public lastTimeDevWithdraw;
     // The Reward Minter!
@@ -99,6 +102,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         address _devaddr,
         address _safuaddr,
         address _refAddr,
+        address _feeAddr,
         IMultiFeeDistribution _rewardMinter,
         uint256 _emoPerSecond,
         address _votingEscrow
@@ -111,6 +115,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         devaddr = _devaddr;
         safuaddr = _safuaddr;
         refAddr = _refAddr;
+        feeAddr = _feeAddr;
         rewardMinter = _rewardMinter;
         emoPerSecond = _emoPerSecond;
         votingEscrow = _votingEscrow;
@@ -129,6 +134,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
             allocPoint : 100,
             lastRewardTime : startTime,
             accEmoPerShare : 0,
+            depositFeePercent : 0,
             incentivesController : IOnwardIncentivesController(address(0))
         }));
 
@@ -173,7 +179,8 @@ contract MasterChef is Ownable, ReentrancyGuard {
 
     // Add a new lp to the pool. Can only be called by the owner.
     // XXX DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(uint256 _allocPoint, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) public onlyOwner nonDuplicated(_lpToken) {
+    function add(uint256 _allocPoint, IERC20 _lpToken, uint256 _depositFeePercent, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) public onlyOwner nonDuplicated(_lpToken) {
+        require(_depositFeePercent <= percentDec, "set: invalid deposit fee basis points");
         require(startTime != 0, "!startTime");
         if (_withUpdate) {
             massUpdatePools();
@@ -189,13 +196,15 @@ contract MasterChef is Ownable, ReentrancyGuard {
             allocPoint : _allocPoint,
             lastRewardTime : lastRewardTime,
             accEmoPerShare : 0,
-            incentivesController: _incentivesController
+            depositFeePercent : _depositFeePercent,
+            incentivesController : _incentivesController
         }));
         emit Add(poolInfo.length.sub(1), _allocPoint, _lpToken, _incentivesController, _boost);
     }
 
     // Update the given pool's EMO allocation point. Can only be called by the owner.
-    function set(uint256 _pid, uint256 _allocPoint, IOnwardIncentivesController _incentivesController, bool _withUpdate) public onlyOwner {
+    function set(uint256 _pid, uint256 _allocPoint, uint256 _depositFeePercent, IOnwardIncentivesController _incentivesController, bool _withUpdate) public onlyOwner {
+        require(_depositFeePercent <= percentDec, "set: invalid deposit fee basis points");
         require(startTime != 0, "!startTime");
         require(_pid != 0 || address(_incentivesController) == address(0), "!incentive");
         if (_withUpdate) {
@@ -203,6 +212,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         }
         uint256 prevAllocPoint = poolInfo[_pid].allocPoint;
         poolInfo[_pid].allocPoint = _allocPoint;
+        poolInfo[_pid].depositFeePercent = _depositFeePercent;
         poolInfo[_pid].incentivesController = _incentivesController;
         if (prevAllocPoint != _allocPoint) {
             totalAllocPoint = totalAllocPoint.sub(prevAllocPoint).add(_allocPoint);
@@ -294,6 +304,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
             uint256 balanceBefore = pool.lpToken.balanceOf(address(this));
             pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
             _amount = pool.lpToken.balanceOf(address(this)).sub(balanceBefore);
+            if (pool.depositFeePercent > 0) {
+                uint256 depositFee = _amount.mul(pool.depositFeePercent).div(percentDec);
+                pool.lpToken.safeTransfer(feeAddr, depositFee);
+                _amount = _amount.sub(depositFee);
+            }
             user.amount = user.amount.add(_amount);
         }
 
@@ -475,6 +490,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
 
     function setSafuAddress(address _safuaddr) public onlyOwner {
         safuaddr = _safuaddr;
+    }
+
+    function setFeeAddress(address _feeAddr) public onlyOwner {
+        require(_feeAddr != address(0), "setFeeAddress: ZERO");
+        feeAddr = _feeAddr;
     }
 
     function _isContract(address addr) internal view returns (bool) {
