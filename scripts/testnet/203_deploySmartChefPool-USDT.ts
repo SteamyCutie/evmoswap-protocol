@@ -8,8 +8,8 @@ async function main() {
 
     // StakingPoolFactory
     const stakedToken = emoToken.address;
-    const rewardToken = "0xae95d4890bf4471501E0066b6c6244E1CAaEe791"; //USDC Tokens.
-    const rewardPerBlock =  parseUnits("0.17", 6) ;
+    const rewardToken = "0x397F8aBd481B7c00883fb70da2ea5Ae70999c37c"; //usdt Tokens.
+    const rewardPerBlock =  parseUnits("0.07", 6) ;
     const startBlock = 990972;
     const bonusEndBlock = 1990972 ;
     const poolLimitPerUser = 0;
