@@ -40,7 +40,7 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network}) =>
     }
 
     // LPToken
-    const lpArgs = ["3EVM", "3EVM-LP", 18]; // name/symbol/decimal
+    const lpArgs = ["3EMO", "3EMO-LP", 18]; // name/symbol/decimal
     const lPToken = await deploy("LPToken", {
         log: true,
         from: deployer,
@@ -59,10 +59,14 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network}) =>
 
     // todo update stablecoins
     const swapArgs = [
-        ["0x32B576820de1AD3a14D159aF329fb429dC8f5507", "0xcBF05655E88E0C63321CCBDa971AcE9f35ABF027", "0x3C1188Bf4723D68546c0FedF7Bb27DF99829a789"], // address of stablecoins, dai/usdc/usdt
+        [
+            "0x6456d6f7B224283f8B22F03347B58D8B6d975677", 
+            "0x9b5bb7F5BE680843Bcd3B54D4E5C6eE889c124Df", 
+            "0x648D3d969760FDabc71ea9d59c020AD899237b32"
+        ], // address of stablecoins, dai/usdc/usdt
         [18, 6, 6], // decimal of stablecoins, dai/usdc/usdt
-        "3EVM",
-        "3EVM-LP",
+        "3EMO",
+        "3EMO-LP",
         800,
         1e6,
         5000000000,

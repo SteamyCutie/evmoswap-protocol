@@ -9,13 +9,13 @@ async function main() {
     const tokenPrivateSale = await ethers.getContract("EMOPrivateSale");
 
     // 1 set whitelist
-    await tokenPrivateSale.adminSetWhitelisted(whitelist, true);
-    console.log("Set EMOPrivateSale whitelists done!");
+    // await tokenPrivateSale.adminSetWhitelisted(whitelist, true);
+    // console.log("Set EMOPrivateSale whitelists done!");
 
     // 2 set verstart time
-    // const vestingStartTime = Date.UTC(2021, 10, 6, 6, 0, 0) / 1000;
-    // await tokenPrivateSale.adminSetVestingStart(vestingStartTime);
-    // console.log("Set EMOPrivateSale vestingStart done!");
+    const vestingStartTime = Date.UTC(2022, 4, 5, 0, 0, 0) / 1000;
+    await tokenPrivateSale.adminSetVestingStart(vestingStartTime);
+    console.log("Set EMOPrivateSale vestingStart done!");
 }
 
 main()
