@@ -34,7 +34,7 @@ contract MultiFeeDistribution is IMultiFeeDistribution, Ownable {
     IMintableToken public immutable stakingToken;
     // Address receive penalty
     address public penaltyReceiver;
- 
+
     // Duration that rewards are streamed over
     uint256 public constant WEEK = 86400 * 7;
 
@@ -81,21 +81,32 @@ contract MultiFeeDistribution is IMultiFeeDistribution, Ownable {
         address user
     ) view external returns (
         uint256 total,
-        LockedBalance[] memory earningsData
+        LockedBalance[] memory earningsData,
+        uint256[] memory index
     ) {
         LockedBalance[] storage earnings = userEarnings[user];
+
+        uint256 len;
+        for (uint i = 0; i < earnings.length; i++) {
+            if (earnings[i].unlockTime > block.timestamp) {
+                len++;
+            }
+        }
+
+        earningsData = new LockedBalance[](len);
+        index = new uint256[](len);
+
         uint256 idx;
         for (uint i = 0; i < earnings.length; i++) {
             if (earnings[i].unlockTime > block.timestamp) {
-                if (idx == 0) {
-                    earningsData = new LockedBalance[](earnings.length - i);
-                }
                 earningsData[idx] = earnings[i];
+                index[idx] = i;
                 idx++;
                 total = total.add(earnings[i].amount);
             }
         }
-        return (total, earningsData);
+
+        return (total, earningsData, index);
     }
 
     // Final balance received and penalty balance paid by user upon calling exit
@@ -147,10 +158,11 @@ contract MultiFeeDistribution is IMultiFeeDistribution, Ownable {
             uint256 unlockTime = block.timestamp.div(WEEK).mul(WEEK).add(lockDuration);
             LockedBalance[] storage earnings = userEarnings[user];
             uint256 idx = earnings.length;
-            if (idx == 0 || earnings[idx - 1].unlockTime < unlockTime) {
+            if (idx == 0 || (earnings[idx - 1].unlockTime > 0 && earnings[idx - 1].unlockTime < unlockTime)) {
                 earnings.push(LockedBalance({amount : amount, unlockTime : unlockTime}));
             } else {
                 earnings[idx - 1].amount = earnings[idx - 1].amount.add(amount);
+                earnings[idx - 1].unlockTime = unlockTime;
             }
         } else {
             bal.unlocked = bal.unlocked.add(amount);
@@ -204,6 +216,29 @@ contract MultiFeeDistribution is IMultiFeeDistribution, Ownable {
             stakingToken.safeTransfer(penaltyReceiver, penaltyAmount);
         }
         emit Withdrawn(msg.sender, amount, penaltyAmount);
+    }
+
+    // Withdraw earned tokens
+    // Withdraws unexpired tokens by index
+    // incurs a 50% penalty which is distributed based on locked balances.
+    function withdrawByIndex(uint256 index) public {
+        LockedBalance memory earnings = userEarnings[msg.sender][index];
+        require(earnings.amount > 0, "Cannot withdraw 0");
+        require(earnings.unlockTime > block.timestamp, "Token should be unexpired");
+
+        uint amount = earnings.amount;
+        uint256 penaltyAmount = amount / 2;
+        delete userEarnings[msg.sender][index];
+
+        Balances storage bal = balances[msg.sender];
+        bal.earned = bal.earned.sub(amount);
+        bal.total = bal.total.sub(amount);
+        totalSupply = totalSupply.sub(amount);
+        stakingToken.safeTransfer(msg.sender, amount.sub(penaltyAmount));
+        if (penaltyAmount > 0) {
+            stakingToken.safeTransfer(penaltyReceiver, penaltyAmount);
+        }
+        emit Withdrawn(msg.sender, amount.sub(penaltyAmount), penaltyAmount);
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
