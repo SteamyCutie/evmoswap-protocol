@@ -15,15 +15,16 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
   // MasterChef
   const masterArgs = [
     emoToken.address,
-    '857000', // _stakingPercent
-    '90000', // _devPercent
+    '877000', // _stakingPercent
+    '70000', // _daoPercent
     '10000', // _safuPercent
     '43000', // _refPercent
-    process.env.TESTNET_DEPLOYER, // _devaddr
-    process.env.TESTNET_TREASURY, // _safuaddr
+    process.env.TESTNET_DEPLOYER, // _daoAddr
+    process.env.TESTNET_TREASURY, // _safuAddr
     process.env.TESTNET_TREASURY, // _refAddr
+    process.env.TESTNET_TREASURY, // _feeAddr
     multiFeeDistribution.address,
-    parseUnits("2.5631", 18),
+    parseUnits("3.25", 18),
     votingEscrow.address
   ]; 
 
