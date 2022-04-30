@@ -179,7 +179,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
 
     // Add a new lp to the pool. Can only be called by the owner.
     // XXX DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(uint256 _allocPoint, IERC20 _lpToken, uint256 _depositFeePercent, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) public onlyOwner nonDuplicated(_lpToken) {
+    function add(uint256 _allocPoint, uint256 _depositFeePercent, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) public onlyOwner nonDuplicated(_lpToken) {
         require(_depositFeePercent <= percentDec, "set: invalid deposit fee basis points");
         require(startTime != 0, "!startTime");
         if (_withUpdate) {
