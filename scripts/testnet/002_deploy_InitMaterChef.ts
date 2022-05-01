@@ -56,16 +56,16 @@ async function main() {
     //     true
     // );
 
-    await masterChef.add(
-        1000,
-        0, // _depositFeePercent
-        '0x6320CFBEBbE1f18160DA60eA06ACc87F82dBCf36', //usdc-evmos
-        '0x0000000000000000000000000000000000000000', //rewards
-        true,
-        true
-    );
+    // await masterChef.add(
+    //     1000,
+    //     0, // _depositFeePercent
+    //     '0x6320CFBEBbE1f18160DA60eA06ACc87F82dBCf36', //usdc-evmos
+    //     '0x0000000000000000000000000000000000000000', //rewards
+    //     true,
+    //     true
+    // );
 
-    // console.log('Add pool done!')
+    console.log('Add pool done!')
 }
 
 main()

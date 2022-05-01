@@ -14,7 +14,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
   // Deploy Args
   const deployArgs = [
     votingEscrow.address, 
-    Date.UTC(2022, 3, 25, 15, 0, 0) / 1000, // year: 2000, month: 0, date: 1, hour: 12, minute: 34, second: 5
+    Date.UTC(2022, 3, 20, 0, 0, 0) / 1000, // year: 2000, month: 0, date: 1, hour: 12, minute: 34, second: 5
     emoToken.address, 
     deployer, 
   ]; 
@@ -38,7 +38,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'bsctests';
+  return hre.network.name != 'bsctest';
 };
 
 func.tags = ["FeeDistributor"];
