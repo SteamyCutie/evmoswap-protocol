@@ -667,8 +667,8 @@ library MetaSwapUtils {
         }
         x = x.add(xp[tokenIndexFrom]);
 
-        uint256 y = SwapUtils.getY(
-            self._getAPrecise(),
+        uint256 y = getY(
+            getAPrecise(self),
             tokenIndexFrom,
             tokenIndexTo,
             x,
