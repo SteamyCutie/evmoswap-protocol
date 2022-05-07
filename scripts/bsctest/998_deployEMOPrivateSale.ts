@@ -3,7 +3,8 @@ import { ethers } from "hardhat";
 async function main() {
 
     const whitelist = [
-        '0xB82fA569843fA783D7a060498a647DE9F548560A',
+        '0xE871fF8D355A351C21c5C4423874b141DA23ee43',
+        '0x0aA282136b3924ca6767C4D5B9aad6f83bD40A9c'
     ]
 
     const tokenPrivateSale = await ethers.getContract("EMOPrivateSale");

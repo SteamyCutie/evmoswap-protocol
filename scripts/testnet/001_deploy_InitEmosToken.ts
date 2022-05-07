@@ -7,18 +7,20 @@ async function main() {
     const masterChef = await ethers.getContract("MasterChef");
     const multiFeeDistribution = await ethers.getContract("MultiFeeDistribution");
 
+    // 0 Set dev minter 
     // await emosToken.addMinter(process.env.TESTNET_DEPLOYER);
     // console.log('Set minter done!')
 
-    // set minter
+    // 1 set minter
     // await emosToken.addMinter(multiFeeDistribution.address);
+    // console.log('Set multiFeeDistribution minter done!')
 
-    // add Masterchef as minter of EmosToken
-    // console.log("Add Masterchef as minter of EmosToken, masterChef=", masterChef.address);
-    // await emosToken.addMinter(masterChef.address);
+    // 2 add Masterchef as minter of EmosToken
+    await emosToken.addMinter(masterChef.address);
+    console.log("Add Masterchef as minter of EmosToken, masterChef=", masterChef.address);
 
-    // init mint tokens
-    // await emosToken.mint(process.env.TESTNET_DEPLOYER, parseUnits("50000000", 18));
+    // 3 init mint tokens
+    // await emosToken.mint(process.env.TESTNET_DEPLOYER, parseUnits("10000000", 18));
     // console.log('Mint token done!')
 }
 

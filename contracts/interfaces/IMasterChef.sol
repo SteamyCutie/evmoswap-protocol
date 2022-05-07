@@ -40,10 +40,10 @@ interface IMasterChef {
     function transferOwnership(address newOwner) external;
 
     // Add a new lp to the pool. Can only be called by the owner.
-    function add(uint256 _allocPoint, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) external;
+    function add(uint256 _allocPoint, uint256 _depositFeePercent, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) external;
 
     // Update the given pool's EMO allocation point. Can only be called by the owner.
-    function set(uint256 _pid, uint256 _allocPoint, IOnwardIncentivesController _incentivesController, bool _withUpdate) external;
+    function set(uint256 _pid, uint256 _allocPoint, uint256 _depositFeePercent, IOnwardIncentivesController _incentivesController, bool _withUpdate) external;
 
     // Update reward variables of the given pool to be up-to-date.
     function updatePool(uint256 _pid) external;

@@ -48,7 +48,6 @@ contract FeeDistributor is Ownable, ReentrancyGuard {
     uint256[1000000000000000] public tokensPerWeek;
 
     address public votingEscrow;
-    // EMO-EVMOS LP
     address public token;
     uint256 public tokenLastBalance;
 
@@ -67,7 +66,7 @@ contract FeeDistributor is Ownable, ReentrancyGuard {
     * @notice Contract constructor
     * @param _votingEscrow VotingEscrow contract address
     * @param _startTime Epoch time for fee distribution to start
-    * @param _token Fee token address (EMO-EVMOS LP)
+    * @param _token Fee token address
     * @param _emergencyReturn Address to transfer `_token` balance to,if this contract is killed
     ***/
     constructor(address _votingEscrow, uint256 _startTime, address _token, address _emergencyReturn) public {
@@ -382,8 +381,8 @@ contract FeeDistributor is Ownable, ReentrancyGuard {
     }
 
     /***
-    * @notice Receive EMO-EVMOS LP into the contract and trigger a token checkpoint
-    * @param _coin Address of the coin being received (must be EMO-EVMOS LP),just for preventing misoperation
+    * @notice Receive fee token into the contract and trigger a token checkpoint
+    * @param _coin Address of the coin being received (must be fee token),just for preventing misoperation
     * @return bool success
     ***/
     function distribute(address _coin) external returns (bool) {
@@ -412,7 +411,7 @@ contract FeeDistributor is Ownable, ReentrancyGuard {
 
     /***
     * @notice Kill the contract
-    * @dev Killing transfers the entire EMO-EVMOS LP balance to the emergency return address
+    * @dev Killing transfers the entire fee token balance to the emergency return address
     *   and blocks the ability to claim or burn. The contract cannot be unkilled.
     ***/
     function killMe() external onlyOwner {

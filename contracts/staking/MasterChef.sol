@@ -38,26 +38,26 @@ contract MasterChef is Ownable, ReentrancyGuard {
 
     // The EMO TOKEN!
     EMOToken public emo;
-    //Pools, Farms, Dev, Refs percent decimals
+    //Pools, Farms, DAO, Refs percent decimals
     uint256 public percentDec = 1000000;
     //Pools and Farms percent from token per block
     uint256 public stakingPercent;
-    //Developers percent from token per block
-    uint256 public devPercent;
+    //DAO percent from token per block
+    uint256 public daoPercent;
     //Safu fund percent from token per block
     uint256 public safuPercent;
     //Referrals percent from token per block
     uint256 public refPercent;
-    // Dev address.
-    address public devaddr;
+    // DAO address.
+    address public daoAddr;
     // Safu fund.
-    address public safuaddr;
+    address public safuAddr;
     // Refferals commision address.
     address public refAddr;
     // Deposit Fee address
     address public feeAddr;
-    // Last block then develeper withdraw dev and ref fee
-    uint256 public lastTimeDevWithdraw;
+    // Last block then deployer withdraw dao and ref fee
+    uint256 public lastTimeDaoWithdraw;
     // The Reward Minter!
     IMultiFeeDistribution public rewardMinter;
     // Voting power
@@ -96,11 +96,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
     constructor(
         EMOToken _emo,
         uint256 _stakingPercent,
-        uint256 _devPercent,
+        uint256 _daoPercent,
         uint256 _safuPercent,
         uint256 _refPercent,
-        address _devaddr,
-        address _safuaddr,
+        address _daoAddr,
+        address _safuAddr,
         address _refAddr,
         address _feeAddr,
         IMultiFeeDistribution _rewardMinter,
@@ -109,11 +109,11 @@ contract MasterChef is Ownable, ReentrancyGuard {
     ) public {
         emo = _emo;
         stakingPercent = _stakingPercent;
-        devPercent = _devPercent;
+        daoPercent = _daoPercent;
         safuPercent = _safuPercent;
         refPercent = _refPercent;
-        devaddr = _devaddr;
-        safuaddr = _safuaddr;
+        daoAddr = _daoAddr;
+        safuAddr = _safuAddr;
         refAddr = _refAddr;
         feeAddr = _feeAddr;
         rewardMinter = _rewardMinter;
@@ -168,18 +168,18 @@ contract MasterChef is Ownable, ReentrancyGuard {
     }
 
     function withdrawDevAndRefFee() public {
-        require(lastTimeDevWithdraw < block.timestamp, 'wait for new block');
-        uint256 multiplier = getMultiplier(lastTimeDevWithdraw, block.timestamp);
+        require(lastTimeDaoWithdraw < block.timestamp, 'wait for new block');
+        uint256 multiplier = getMultiplier(lastTimeDaoWithdraw, block.timestamp);
         uint256 emoReward = multiplier.mul(emoPerSecond);
-        emo.mint(devaddr, emoReward.mul(devPercent).div(percentDec));
-        emo.mint(safuaddr, emoReward.mul(safuPercent).div(percentDec));
+        emo.mint(daoAddr, emoReward.mul(daoPercent).div(percentDec));
+        emo.mint(safuAddr, emoReward.mul(safuPercent).div(percentDec));
         emo.mint(refAddr, emoReward.mul(refPercent).div(percentDec));
-        lastTimeDevWithdraw = block.timestamp;
+        lastTimeDaoWithdraw = block.timestamp;
     }
 
     // Add a new lp to the pool. Can only be called by the owner.
     // XXX DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(uint256 _allocPoint, IERC20 _lpToken, uint256 _depositFeePercent, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) public onlyOwner nonDuplicated(_lpToken) {
+    function add(uint256 _allocPoint, uint256 _depositFeePercent, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate) public onlyOwner nonDuplicated(_lpToken) {
         require(_depositFeePercent <= percentDec, "set: invalid deposit fee basis points");
         require(startTime != 0, "!startTime");
         if (_withUpdate) {
@@ -475,21 +475,21 @@ contract MasterChef is Ownable, ReentrancyGuard {
     }
 
     function setEmoPerSecond(uint256 _emoPerSecond) public onlyOwner {
-        require(_emoPerSecond <= 5 * 1e18, "Max per second 5 EMO");
+        require(_emoPerSecond <= 6 * 1e18, "Max per second 5 EMO");
         massUpdatePools();
         emoPerSecond = _emoPerSecond;
     }
 
-    function setDevAddress(address _devaddr) public onlyOwner {
-        devaddr = _devaddr;
+    function setDaoAddress(address _daoAddr) public onlyOwner {
+        daoAddr = _daoAddr;
     }
 
-    function setRefAddress(address _refaddr) public onlyOwner {
-        refAddr = _refaddr;
+    function setRefAddress(address _refAddr) public onlyOwner {
+        refAddr = _refAddr;
     }
 
-    function setSafuAddress(address _safuaddr) public onlyOwner {
-        safuaddr = _safuaddr;
+    function setSafuAddress(address _safuAddr) public onlyOwner {
+        safuAddr = _safuAddr;
     }
 
     function setFeeAddress(address _feeAddr) public onlyOwner {
