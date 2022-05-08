@@ -11,7 +11,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
   const resultMulti = await deploy("ERC20Mock", {
     log: true,
     from: deployer,
-    args: ['USDC Mock', 'USDC', parseUnits("50000000", 6)],
+    args: ['LaunchPad Mock', 'MPAD', parseUnits("50000000", 18)],
   });
 
   // Verify contract

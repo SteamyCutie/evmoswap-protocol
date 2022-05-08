@@ -39,7 +39,7 @@ contract EMOPrivateSale is Ownable, Pausable {
 
     // *** SALE PARAMETERS ***
     uint256 public constant PRECISION = 1000000; //Up to 0.000001
-    uint256 public constant WITHDRAWAL_PERIOD = 365 * 24 * 60 * 60; //1 year to withdrawal
+    uint256 public constant WITHDRAWAL_PERIOD = 395 * 24 * 60 * 60; //1 year to withdrawal
 
     /***
      * STORAGE
@@ -52,9 +52,9 @@ contract EMOPrivateSale is Ownable, Pausable {
     // *** SALE PARAMETERS START ***
 
     AggregatorV3Interface public priceFeed;
-    uint256 public  priSaleStart;
-    uint256 public  priSaleEnd;
-    uint256 public  priSaleTokenPool; // total amount of token in private slae pool
+    uint256 public  privateSaleStart;
+    uint256 public  privateSaleEnd;
+    uint256 public  privateSaleTokenPool; // total amount of token in private slae pool
 
     // *** SALE PARAMETERS END ***
 
@@ -71,7 +71,7 @@ contract EMOPrivateSale is Ownable, Pausable {
     mapping(address => uint256) internal _claimed;
     mapping(address => bool) public whitelisted;
 
-    uint256 public purchasedPriSale;
+    uint256 public purchasedPrivateSale;
     uint256 public basePrice; // the price of ETH in usd multiply by PRECISION
 
     address private treasury;
@@ -93,7 +93,7 @@ contract EMOPrivateSale is Ownable, Pausable {
     * @dev Throws if called when no ongoing pre-sale or public sale.
     */
     modifier onlySale() {
-        require(_isPrivateSale(), "Presale stages are over or not started");
+        require(_isPrivateSale(), "PrivateSale stages are over or not started");
         _;
     }
 
@@ -101,7 +101,7 @@ contract EMOPrivateSale is Ownable, Pausable {
     * @dev Throws if sale stage is ongoing.
     */
     modifier notOnSale() {
-        require(!_isPrivateSale(), "Presale is not over");
+        require(!_isPrivateSale(), "PrivateSale is not over");
         _;
     }
 
@@ -127,11 +127,11 @@ contract EMOPrivateSale is Ownable, Pausable {
 
     constructor(address _treasury, address _keeper, address _usdc,
         address _token, uint256 _tokenPrice, uint256 _basePrice,
-        uint256 _minTokensAmount, uint256 _maxTokensAmount, uint256 _priSaleTokenPool,
-        uint256 _priSaleStart, uint256 _priSaleEnd, uint256 _vestingDuration) public {
+        uint256 _minTokensAmount, uint256 _maxTokensAmount, uint256 _privateSaleTokenPool,
+        uint256 _privateSaleStart, uint256 _privateSaleEnd, uint256 _vestingDuration) public {
         require(_treasury != address(0), "!treasury");
-        require(_priSaleStart > 0, "!start");
-        require(_priSaleEnd > _priSaleStart, "start >= end");
+        require(_privateSaleStart > 0, "!start");
+        require(_privateSaleEnd > _privateSaleStart, "start >= end");
         require(_vestingDuration < WITHDRAWAL_PERIOD, "vestingDuration >= WITHDRAWAL_PERIOD");
 
         treasury = _treasury;
@@ -144,10 +144,10 @@ contract EMOPrivateSale is Ownable, Pausable {
 
         minTokensAmount = _minTokensAmount;
         maxTokensAmount = _maxTokensAmount;
-        priSaleTokenPool = _priSaleTokenPool;
+        privateSaleTokenPool = _privateSaleTokenPool;
 
-        priSaleStart = _priSaleStart;
-        priSaleEnd = _priSaleEnd;
+        privateSaleStart = _privateSaleStart;
+        privateSaleEnd = _privateSaleEnd;
         vestingDuration = _vestingDuration;
     }
 
@@ -165,7 +165,7 @@ contract EMOPrivateSale is Ownable, Pausable {
      */
     function adminSetVestingStart(uint256 _vestingStart) virtual external onlyOwner {
         require(vestingStart == 0, "Vesting start is already set");
-        require(_vestingStart > priSaleEnd && block.timestamp < _vestingStart, "Incorrect time provided");
+        require(_vestingStart > privateSaleEnd && block.timestamp < _vestingStart, "Incorrect time provided");
         vestingStart = _vestingStart;
     }
 
@@ -256,8 +256,8 @@ contract EMOPrivateSale is Ownable, Pausable {
         uint256 purchasedAmount = calcEthPurchasedAmount(msg.value);
         require(purchasedAmount >= minTokensAmount, "Minimum required unreached");
 
-        require(purchasedPriSale.add(purchasedAmount) <= priSaleTokenPool, "Not enough token in private slae pool");
-        purchasedPriSale = purchasedPriSale.add(purchasedAmount);
+        require(purchasedPrivateSale.add(purchasedAmount) <= privateSaleTokenPool, "Not enough token in private slae pool");
+        purchasedPrivateSale = purchasedPrivateSale.add(purchasedAmount);
         purchased[_msgSender()] = purchased[_msgSender()].add(purchasedAmount);
         require(purchased[_msgSender()] <= maxTokensAmount, "Maximum allowed exceeded");
 
@@ -274,8 +274,8 @@ contract EMOPrivateSale is Ownable, Pausable {
         uint256 purchasedAmount = calcCoinPurchasedAmount(coin, amount);
         require(purchasedAmount >= minTokensAmount, "Minimum required unreached");
 
-        purchasedPriSale = purchasedPriSale.add(purchasedAmount);
-        require(purchasedPriSale <= priSaleTokenPool, "Token is not enough!");
+        purchasedPrivateSale = purchasedPrivateSale.add(purchasedAmount);
+        require(purchasedPrivateSale <= privateSaleTokenPool, "Token is not enough!");
         purchased[_msgSender()] = purchased[_msgSender()].add(purchasedAmount);
         require(purchased[_msgSender()] <= maxTokensAmount, "Maximum allowed exceeded");
 
@@ -298,7 +298,7 @@ contract EMOPrivateSale is Ownable, Pausable {
             if (block.timestamp >= vestingStart.add(WITHDRAWAL_PERIOD)) {
                 withdrawAmount = IERC20(ERC20token).balanceOf(address(this));
             } else {
-                withdrawAmount = IERC20(ERC20token).balanceOf(address(this)).sub(purchasedPriSale);
+                withdrawAmount = IERC20(ERC20token).balanceOf(address(this)).sub(purchasedPrivateSale);
             }
         }
 
@@ -413,6 +413,6 @@ contract EMOPrivateSale is Ownable, Pausable {
      * @return True is private slae is active
      */
     function _isPrivateSale() virtual internal view returns (bool) {
-        return (block.timestamp >= priSaleStart && block.timestamp < priSaleEnd);
+        return (block.timestamp >= privateSaleStart && block.timestamp < privateSaleEnd);
     }
 }

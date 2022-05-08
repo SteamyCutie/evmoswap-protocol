@@ -13,19 +13,20 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
   // 0 modify USDC address
   // 1 deploy contract
   // 2 set adminSetVestingStart:  need > _preSaleEnd
+
   const args = [
     process.env.TESTNET_TREASURY, //_treasury
     process.env.TESTNET_TREASURY, //_keeper
     '0x9b5bb7F5BE680843Bcd3B54D4E5C6eE889c124Df', // _usdc - when mainnet need to modify it.
     emoToken.address, // _emo
-    parseUnits("0.10", 6), // _tokenPrice * 1000000,
-    parseUnits("0.3756", 6), // _basePrice * 1000000, the price of CRO in usd multiply by PRECISION
-    parseUnits("100000", 18), // _minTokensAmount -> $10000 / 0.1 = 100000
-    parseUnits("500000", 18), // _maxTokensAmount -> $50000 / 0.1 = 500000
-    parseUnits("3750000", 18), // _privateSaleTokenPool -> 375 0000
-    Date.UTC(2022, 3, 29, 0, 0, 0) / 1000, // _privateSaleStart year: 2000, month: 0, date: 1, hour: 12, minute: 34, second: 5
-    Date.UTC(2022, 4, 2, 0, 0, 0) / 1000, // _privateSaleEnd year: 2000, month: 0, date: 1, hour: 12, minute: 34, second: 5
-    3 * 24 * 3600, // _vestingDuration 365
+    parseUnits("0.045", 6), // _tokenPrice * 1000000,
+    parseUnits("4.3", 6), // _basePrice * 1000000, the price of CRO in usd multiply by PRECISION
+    parseUnits("26000", 18), // _minTokensAmount -> $2000 / 0.075 = 26666
+    parseUnits("133500", 18), // _maxTokensAmount -> $10000 / 0.075 = 133333
+    parseUnits("14000000", 18), // _privateSaleTokenPool -> 14,000,000
+    Date.UTC(2022, 4, 6, 4, 10, 0) / 1000, // _privateSaleStart year: 2000, month: 0, date: 1, hour: 12, minute: 34, second: 5
+    Date.UTC(2022, 4, 6, 4, 30, 0) / 1000, // _privateSaleEnd year: 2000, month: 0, date: 1, hour: 12, minute: 34, second: 5
+    1 * 24 * 3600, // _vestingDuration 365 （for testnet）
   ];
 
   const resultMaster = await deploy("EMOPrivateSale", {
@@ -47,7 +48,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'bsctests';
+  return hre.network.name != 'bsctest';
 };
 
 func.tags = ["EMOPrivateSale"];

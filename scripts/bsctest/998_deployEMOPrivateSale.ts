@@ -14,9 +14,9 @@ async function main() {
     console.log("Set EMOPrivateSale whitelists done!");
 
     // 2 set verstart time
-    // const vestingStartTime = Date.UTC(2021, 10, 6, 6, 0, 0) / 1000;
+    // const vestingStartTime = Date.UTC(2022, 4, 5, 6, 6, 0) / 1000;
     // await tokenPrivateSale.adminSetVestingStart(vestingStartTime);
-    // console.log("Set EMOPrivateSale vestingStart done!");
+    // console.log("Set EMOPrivateSale vestingStart done!", tokenPrivateSale.address);
 }
 
 main()

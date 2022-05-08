@@ -32,7 +32,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'mainnet';
+  return hre.network.name != 'mainnets';
 };
 
 func.tags = ["EvmoSwapRouter"];

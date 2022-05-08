@@ -4,7 +4,7 @@ import "hardhat-deploy-ethers";
 import "hardhat-spdx-license-identifier";
 import "@nomiclabs/hardhat-etherscan";
 
-const gasPrice = 5000*1e9;
+const gasPrice = 5*1e9;
 
 module.exports = {
   defaultNetwork: "hardhat",
@@ -18,7 +18,7 @@ module.exports = {
     mainnet: {
       live: false,
       chainId: 9001,
-      // gasPrice: gasPrice,
+      gasPrice: gasPrice,
       // gasLimit: 3000000,
       url: process.env.RPC_MAINNET_URL,
       accounts: process.env.MAINNET_PRIVATE_KEY ? [`0x${process.env.MAINNET_PRIVATE_KEY}`] : [],
