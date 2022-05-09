@@ -30,7 +30,7 @@ module.exports = {
       accounts: process.env.TESTNET_PRIVATE_KEY ? [`0x${process.env.TESTNET_PRIVATE_KEY}`] : [],
     },
     bsctest: {
-      live: false,
+      live: true,
       chainId: 97,
       url: process.env.RPC_BSC_TESTNET,
       accounts: process.env.TESTNET_PRIVATE_KEY ? [`0x${process.env.TESTNET_PRIVATE_KEY}`] : [],

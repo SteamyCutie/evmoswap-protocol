@@ -413,7 +413,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         if (user.workingAmount > 0) {
             uint256 pending = user.workingAmount.mul(pool.accEmoPerShare).div(1e12).sub(user.rewardDebt);
             if (pending > 0) {
-                rewardMinter.mint(msg.sender, pending, true);
+                emo.mint(msg.sender, pending);
             }
         }
         if (_amount > 0) {
@@ -436,7 +436,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
         if (user.workingAmount > 0) {
             uint256 pending = user.workingAmount.mul(pool.accEmoPerShare).div(1e12).sub(user.rewardDebt);
             if (pending > 0) {
-                rewardMinter.mint(msg.sender, pending, true);
+                emo.mint(msg.sender, pending);
             }
         }
         if (_amount > 0) {
