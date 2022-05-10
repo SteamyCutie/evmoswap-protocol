@@ -28,6 +28,4 @@ const getDeploymentAddresses = (networkName: any) => {
     return rtnAddresses
 }
 
-module.exports = {
-    getDeploymentAddresses
-}
+export default getDeploymentAddresses

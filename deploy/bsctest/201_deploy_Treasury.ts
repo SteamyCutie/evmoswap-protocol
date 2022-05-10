@@ -1,14 +1,14 @@
 import { run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
-const { getDeploymentAddresses } = require("../utils/readStatic")
+import getDeploymentAddresses from "../../utils/readStatic"
 
 const func: DeployFunction = async({getNamedAccounts, deployments, network}) => {
   console.log("> (201) Deploy Treasury:");
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const emoAddr = getDeploymentAddresses(network)["EmoToken"]
-  const gemoAddr = getDeploymentAddresses(network)["GemEMO"]
+  const emoAddr = getDeploymentAddresses(network.name)["EMOToken"]
+  const gemoAddr = getDeploymentAddresses(network.name)["GemEMO"]
 
   // GEMOToken
   const result = await deploy("Treasury", {
@@ -22,7 +22,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
     if (network.live) {
       await run("verify:verify", {
         address: result.address,
-        constructorArgs: [],
+        constructorArguments: [emoAddr, gemoAddr],
         contract: "contracts/gemo/Treasury.sol:Treasury"
       });
     }
@@ -32,7 +32,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'bsctests';
+  return hre.network.name != 'bsctest';
 };
 
 func.tags = ["Treasury"];
