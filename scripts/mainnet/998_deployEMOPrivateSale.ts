@@ -1881,7 +1881,7 @@ async function main() {
     ////////////////////////////////////////////////////////////////
 
     // 2 update thd base price
-    await tokenPrivateSale.adminSetBasePrice(parseUnits("3.76", 6))
+    await tokenPrivateSale.adminSetBasePrice(parseUnits("3.39", 6))
     console.log("Set EMOPrivateSale adminSetBasePrice done!");
 
     // 2 set verstart time

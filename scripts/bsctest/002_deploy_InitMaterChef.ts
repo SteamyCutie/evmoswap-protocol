@@ -56,14 +56,14 @@ async function main() {
     //     true
     // );
 
-    await masterChef.add(
-        1000,
-        0, // _depositFeePercent
-        '0x87ce4e5bBCE1Ee646Fa28B61CbC7EFac4722680e', //usdc-bnb
-        '0x0000000000000000000000000000000000000000', //rewards
-        true,
-        true
-    );
+    // await masterChef.add(
+    //     1000,
+    //     0, // _depositFeePercent
+    //     '0x87ce4e5bBCE1Ee646Fa28B61CbC7EFac4722680e', //usdc-bnb
+    //     '0x0000000000000000000000000000000000000000', //rewards
+    //     true,
+    //     true
+    // );
 
     console.log('Add pool done!')
 }

@@ -8,17 +8,19 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
   const { deployer } = await getNamedAccounts();
 
   // Multicall
+  const mockArgs = ['UST Mock', 'UST', parseUnits("50000000", 18)]
   const resultMulti = await deploy("ERC20Mock", {
     log: true,
     from: deployer,
-    args: ['LaunchPad Mock', 'MPAD', parseUnits("50000000", 18)],
+    args: mockArgs
   });
 
   // Verify contract
   if(resultMulti.newlyDeployed) {
     if (network.live) {
       await run("verify:verify", {
-        address: resultMulti.address
+        address: resultMulti.address,
+        constructorArguments: mockArgs,
       });
     }
   }

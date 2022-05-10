@@ -2,7 +2,7 @@ import {run} from "hardhat";
 import {DeployFunction} from "hardhat-deploy/types";
 
 const func: DeployFunction = async ({getNamedAccounts, deployments, network, ethers}) => {
-    console.log("> (105) Deploy 3Pool_UST:");
+    console.log("> (106) Deploy 3Pool_UST:");
 
     const {deploy} = deployments;
     const {deployer} = await getNamedAccounts();
@@ -32,7 +32,7 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network, eth
     }
 
     // MetaLPToken
-    const metaLpArgs = ["3EVM-UST", "3EVM-UST-LP", 18]; // name/symbol/decimal
+    const metaLpArgs = ["3EMO-UST", "3EMO-UST-LP", 18]; // name/symbol/decimal
     const metaLPToken = await deploy("MetaLPToken", {
         log: true,
         from: deployer,
@@ -51,11 +51,12 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network, eth
     }
 
     // todo update stablecoins && a && fee
+    // 0xf8e00573a7e669e42F4bF022497bAfca527c403F - UST
     const metaSwapArgs = [
-        ["0xA1f171347C02A688327Aa2fa4141a1c8BE8fc789", lPToken.address], // address of stablecoins, ust/3evm
-        [18, 18], // decimal of stablecoins, ust/3evm
-        "3EVM-UST",
-        "3EVM-UST-LP",
+        ["0xf8e00573a7e669e42F4bF022497bAfca527c403F", lPToken.address], // address of stablecoins, ust/3EMO
+        [18, 18], // decimal of stablecoins, ust/3EMO
+        "3EMO-UST",
+        "3EMO-UST-LP",
         100,
         4000000,
         5000000000,
@@ -106,7 +107,7 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network, eth
 export default func;
 
 func.skip = async (hre) => {
-    return hre.network.name != 'bsctests';
+    return hre.network.name != 'bsctest';
 };
 
 func.tags = ["3POOL-UST"];
