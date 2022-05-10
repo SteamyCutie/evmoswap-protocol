@@ -12,6 +12,6 @@ import "./RBEP20.sol";
 
 contract GemEMO is RBEP20 {
 
-    constructor (uint256 initialSupply) public RBEP20(initialSupply, "Gem EMO Token", "GEMO", 18, 200) {}
+    constructor () public RBEP20(500000000 * 1e18, "Gem EMO Token", "GEMO", 18, 200) {}
 
 }
