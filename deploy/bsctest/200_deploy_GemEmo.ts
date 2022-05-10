@@ -16,7 +16,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
   if(result.newlyDeployed) {
     await run("verify:verify", {
       address: result.address,
-      contract: "contracts/GemEMO.sol:GemEMO"
+      contract: "contracts/gemo/GemEMO.sol:GemEMO"
     });
   }
 }
