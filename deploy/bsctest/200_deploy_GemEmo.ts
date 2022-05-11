@@ -1,7 +1,7 @@
 import { run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 
-const func: DeployFunction = async({getNamedAccounts, deployments, network}) => {
+const func: DeployFunction = async ({ getNamedAccounts, deployments, network }) => {
   console.log("> (200) Deploy GEMOToken:");
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
@@ -13,11 +13,13 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
   });
 
   // Verify contract
-  if(result.newlyDeployed) {
-    await run("verify:verify", {
-      address: result.address,
-      contract: "contracts/gemo/GemEMO.sol:GemEMO"
-    });
+  if (result.newlyDeployed) {
+    if (network.live) {
+      await run("verify:verify", {
+        address: result.address,
+        contract: "contracts/gemo/GemEMO.sol:GemEMO"
+      });
+    }
   }
 }
 
