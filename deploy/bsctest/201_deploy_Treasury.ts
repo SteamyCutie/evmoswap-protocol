@@ -20,14 +20,14 @@ const func: DeployFunction = async ({ getNamedAccounts, deployments, network }) 
   // Verify & Initial Setting contract
   if (result.newlyDeployed) {
     if (network.live) {
+      const gEmoToken = await ethers.getContract("GemEMO");
+      await gEmoToken.excludeAccount(result.address)
+
       await run("verify:verify", {
         address: result.address,
         constructorArguments: [emoAddr, gemoAddr],
         contract: "contracts/gemo/Treasury.sol:Treasury"
       });
-
-      const gEmoToken = await ethers.getContract("GemEMO");
-      await gEmoToken.excludeAccount(result.address)
     }
   }
 
