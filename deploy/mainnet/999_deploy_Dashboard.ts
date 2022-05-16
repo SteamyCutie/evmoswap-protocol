@@ -16,11 +16,11 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
   const evmoSwapFactory = await ethers.getContract("EvmoSwapFactory");
 
 
-  const WEVMOS = await ethers.getContract("WEVMOS");
-  const USDC = "0x9b5bb7F5BE680843Bcd3B54D4E5C6eE889c124Df";
+  const USDC = "0x51e44FfaD5C2B122C8b635671FCC8139dc636E82";
+  const WEVMOS = '0xD4949664cD82660AaE99bEdc034a0deA8A0bd517';
 
   // address _weth, address _usdc, address _reward, address _master, address _factory
-  const dashboardArgs = [WEVMOS.address, USDC, emoToken.address, masterChef.address, evmoSwapFactory.address];
+  const dashboardArgs = [WEVMOS, USDC, emoToken.address, masterChef.address, evmoSwapFactory.address];
 
   const resultMaster = await deploy("Dashboard", {
     log: true,
@@ -41,7 +41,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'bsctests';
+  return hre.network.name != 'mainnet';
 };
 
 func.tags = ["Dashboard"];

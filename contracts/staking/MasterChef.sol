@@ -225,7 +225,6 @@ contract MasterChef is Ownable, ReentrancyGuard {
         return _to.sub(_from).mul(BONUS_MULTIPLIER);
     }
 
-
     function pendingTokens(uint256 _pid, address _user) external view returns (address[] memory tokens, uint[] memory amounts) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
@@ -475,7 +474,7 @@ contract MasterChef is Ownable, ReentrancyGuard {
     }
 
     function setEmoPerSecond(uint256 _emoPerSecond) public onlyOwner {
-        require(_emoPerSecond <= 6 * 1e18, "Max per second 5 EMO");
+        require(_emoPerSecond <= 12 * 1e18, "Max per second 12 EMO");
         massUpdatePools();
         emoPerSecond = _emoPerSecond;
     }

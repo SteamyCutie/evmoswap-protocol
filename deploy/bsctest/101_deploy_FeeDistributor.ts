@@ -38,7 +38,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'bsctest';
+  return hre.network.name != 'bsctests';
 };
 
 func.tags = ["FeeDistributor"];

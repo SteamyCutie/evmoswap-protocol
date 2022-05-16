@@ -10,7 +10,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network}) => 
   const vestingArgs = [
     "0xeD75347fFBe08d5cce4858C70Df4dB4Bbe8532a0", // _token LP
     deployer, // _beneficiary
-    Date.UTC(2022, 10, 12, 9, 0, 0) / 1000, // _releaseTime after 365 days
+    Date.UTC(2023, 4, 10, 0, 0, 0) / 1000, // _releaseTime after 365 days
   ];
     
   console.log({vestingArgs})

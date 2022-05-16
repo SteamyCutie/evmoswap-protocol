@@ -64,7 +64,7 @@ async function main() {
 
     // ===========================================================================
     // console.log("IFO finalWithdraw start >>>");
-    // await evmoSwapIFO.finalWithdraw([parseUnits("2024999", 18), parseUnits("397500", 6)], 0)
+    // await evmoSwapIFO.finalWithdraw([parseUnits("0", 18), parseUnits("52470", 6)], 0)
     // console.log("IFO finalWithdraw done <<<");
 
 }

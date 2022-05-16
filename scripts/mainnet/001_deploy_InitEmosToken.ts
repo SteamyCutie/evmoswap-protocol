@@ -12,10 +12,10 @@ async function main() {
     // console.log('Set minter done!')
 
     // 1 init mint tokens
-    // await emosToken.mint(process.env.MAINNET_TREASURY, parseUnits("26000000", 18));
+    // await emosToken.mint(process.env.MAINNET_TREASURY, parseUnits("60000000", 18));
     // console.log('Mint token done!')
 
-    ////////////////////////////////////////////////////////////////
+    ////////////////////////////// MasterChef //////////////////////////////////
     // 2 set minter
     // await emosToken.addMinter(multiFeeDistribution.address);
     // console.log('Set multiFeeDistribution minter done!')

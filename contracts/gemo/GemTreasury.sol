@@ -13,14 +13,14 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * The Treasury contract holds Gem EMO that can be bought with EMO and later
+ * The GemTreasury contract holds Gem EMO that can be bought with EMO and later
  *  be redeemed for EMO.
  *
  * To buy a Gem EMO, a portion of the EMO used will be burned in the process,
  *  while the remaining EMO will be locked in the contract to be unlocked at any
  *  future time.
  */
-contract Treasury is Ownable {
+contract GemTreasury is Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 

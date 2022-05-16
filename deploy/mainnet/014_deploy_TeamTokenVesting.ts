@@ -9,7 +9,7 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 
   const vestingArgs = [
     deployer, // beneficiary
-    Date.UTC(2022, 4, 10, 0, 0, 0) / 1000, // start time
+    Date.UTC(2022, 4, 12, 0, 0, 0) / 1000, // start time
     90 * 24 * 3600,  // cliffDuration 90 days
     31536000 // duration 365 days
   ];

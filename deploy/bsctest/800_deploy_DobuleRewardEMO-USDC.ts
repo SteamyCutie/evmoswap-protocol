@@ -1,36 +1,33 @@
 import { run } from "hardhat";
+import { parseUnits } from "ethers/lib/utils";
 import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async({getNamedAccounts, deployments, network, ethers}) => {
-  console.log("> (104) Deploy RewardPool:");
+  console.log("> (800) Deploy SimpleIncentivesController:");
 
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const emoToken = await ethers.getContract("EMOToken");
+  // EMO-BNB lp
   const masterChef = await ethers.getContract("MasterChef");
-  const votingEscrow = await ethers.getContract("VotingEscrow");
 
   // Deploy Args
   const deployArgs = [
-    emoToken.address, 
-    emoToken.address, 
-    masterChef.address, 
-    votingEscrow.address, 
+    '0x3094A01FC000a38c1996fE6c17E92AADa0e585A5', //_rewardToken - MPAD
+    '0xF6210A01E8F271862871a80Dbf3fdCD720F8Ef3C', //_lpToken emo-_usdc
+    parseUnits("0.25", 18), //_tokenPerSec
+    masterChef.address, //_operator
+    masterChef.address, //_originUser
+    false, //_isNative
   ]; 
 
-  const deployResult = await deploy("RewardPool", {
+  const deployResult = await deploy("SimpleIncentivesController", {
     log: true,
     from: deployer,
     args: deployArgs,
   });
 
   if(deployResult.newlyDeployed) {
-    // set reward pool for votingEscrow
-    console.log("Set RewardPool Starting, votingEscrow=", deployResult.address);
-    await votingEscrow.setRewardPool(deployResult.address);
-    console.log("Set RewardPool Done, votingEscrow=", deployResult.address);
-
     if (network.live) {
       await run("verify:verify", {
         address: deployResult.address,
@@ -43,8 +40,8 @@ const func: DeployFunction = async({getNamedAccounts, deployments, network, ethe
 export default func;
 
 func.skip = async (hre) => {
-  return hre.network.name != 'bsctests';
+  return hre.network.name != 'bsctest';
 };
 
-func.tags = ["RewardPool"];
-func.dependencies = ["VotingEscrow"]
+func.tags = ["SimpleIncentivesController"];
+func.dependencies = ["MasterChef"]

@@ -33,7 +33,7 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network, eth
 
     // MetaLPToken
     const metaLpArgs = ["3EMO-UST", "3EMO-UST-LP", 18]; // name/symbol/decimal
-    const metaLPToken = await deploy("MetaLPToken", {
+    const metaLPToken = await deploy("MetaLPToken-UST", {
         log: true,
         from: deployer,
         contract: "LPToken",
@@ -107,7 +107,7 @@ const func: DeployFunction = async ({getNamedAccounts, deployments, network, eth
 export default func;
 
 func.skip = async (hre) => {
-    return hre.network.name != 'bsctest';
+    return hre.network.name != 'bsctests';
 };
 
 func.tags = ["3POOL-UST"];
