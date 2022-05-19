@@ -29,6 +29,7 @@ async function main() {
 
     ////////////////////////////////////////////////////////
     // 02 uint256 _allocPoint, uint256 _depositFeePercent, IERC20 _lpToken, IOnwardIncentivesController _incentivesController, bool _boost, bool _withUpdate
+    
     // await masterChef.add(
     //     3000,
     //     0, // _depositFeePercent
@@ -50,16 +51,17 @@ async function main() {
     // await masterChef.add(
     //     1000,
     //     0, // _depositFeePercent
-    //     '0x34ae15A977761BB07aCd7E09354802F26a5F7C1D', //usdc-usdt
+    //     '0x6320CFBEBbE1f18160DA60eA06ACc87F82dBCf36', //usdc-evmos
     //     '0x0000000000000000000000000000000000000000', //rewards
     //     true,
     //     true
     // );
 
+    ////////////////////////////////////////////////////////////////
     // await masterChef.add(
     //     1000,
     //     0, // _depositFeePercent
-    //     '0x6320CFBEBbE1f18160DA60eA06ACc87F82dBCf36', //usdc-evmos
+    //     '0x34ae15A977761BB07aCd7E09354802F26a5F7C1D', //usdc-usdt
     //     '0x0000000000000000000000000000000000000000', //rewards
     //     true,
     //     true

@@ -16,8 +16,8 @@ async function main() {
     // console.log('Set multiFeeDistribution minter done!')
 
     // 2 add Masterchef as minter of EmosToken
-    await emosToken.addMinter(masterChef.address);
-    console.log("Add Masterchef as minter of EmosToken, masterChef=", masterChef.address);
+    // await emosToken.addMinter(masterChef.address);
+    // console.log("Add Masterchef as minter of EmosToken, masterChef=", masterChef.address);
 
     // 3 init mint tokens
     // await emosToken.mint(process.env.TESTNET_DEPLOYER, parseUnits("10000000", 18));
